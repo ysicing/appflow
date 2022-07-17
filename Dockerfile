@@ -15,7 +15,7 @@
 # */
 
 # Build the manager binary
-FROM ysicing/god as builder
+FROM ccr.ccs.tencentyun.com/k7scn/god as builder
 
 WORKDIR /workspace
 # Copy the Go Modules manifests
@@ -38,7 +38,7 @@ RUN upx -9 manager
 
 # Use distroless as minimal base image to package the manager binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
-FROM ysicing/debian
+FROM ccr.ccs.tencentyun.com/k7scn/debian
 WORKDIR /
 COPY --from=builder /workspace/manager .
 USER 65532:65532

@@ -121,10 +121,10 @@ genclient: ## Gen Client Code
 	hack/genclient.sh
 
 .PHONY: local
-local: manifests kustomize docker ## Run local manager.
+local: manifests docker ## Run local manager.
 	$(KUSTOMIZE) build config/default > hack/deploy/deploy.yaml
 
-local-crd: manifests kustomize ## gen crd
+local-crd: manifests ## gen crd
 	$(KUSTOMIZE) build config/crd > hack/deploy/crd.yaml
 
 ##@ Build Dependencies
@@ -140,7 +140,7 @@ CONTROLLER_GEN ?= $(LOCALBIN)/controller-gen
 ENVTEST ?= $(LOCALBIN)/setup-envtest
 
 ## Tool Versions
-KUSTOMIZE_VERSION ?= v4.5.5
+KUSTOMIZE_VERSION ?= v3.8.7
 CONTROLLER_TOOLS_VERSION ?= v0.9.0
 
 KUSTOMIZE_INSTALL_SCRIPT ?= "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"

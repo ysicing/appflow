@@ -18,6 +18,7 @@ package apps
 
 import (
 	"context"
+	"time"
 
 	utilclient "github.com/ysicing/appflow/pkg/util/client"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -63,7 +64,7 @@ func add(mgr manager.Manager, r reconcile.Reconciler) error {
 	if err != nil {
 		return err
 	}
-	// Watch for changes to NodeImage
+	// Watch for changes to Web
 	err = c.Watch(&source.Kind{Type: &appsv1beta1.Web{}}, &handler.EnqueueRequestForObject{})
 	if err != nil {
 		return err
@@ -94,9 +95,24 @@ type WebReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.12.1/pkg/reconcile
 func (r *WebReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
+	logs := log.FromContext(ctx)
 
-	// TODO(user): your logic here
+	startTime := time.Now()
+	defer func() {
+		logs.Info("Finished syncing web", "key", req.NamespacedName, "time_since", time.Since(startTime))
+	}()
+
+	// Fetch the Web instance
+	web := &appsv1beta1.Web{}
+	err := r.Get(ctx, req.NamespacedName, web)
+	if err != nil {
+		if client.IgnoreNotFound(err) != nil {
+			return ctrl.Result{}, err
+		}
+		// The Web resource may no longer exist, in which case we stop processing.
+		logs.Info("Web resource not found, stopping reconciliation", "name", req.NamespacedName)
+		return ctrl.Result{}, nil
+	}
 
 	return ctrl.Result{}, nil
 }

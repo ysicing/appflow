@@ -66,7 +66,7 @@ func main() {
 	flag.StringVar(&metricsAddr, "metrics-addr", ":8080", "The address the metric endpoint binds to.")
 	flag.StringVar(&healthProbeAddr, "health-probe-addr", ":8000", "The address the healthz/readyz endpoint binds to.")
 	flag.BoolVar(&enableLeaderElection, "enable-leader-election", true, "Whether you need to enable leader election.")
-	flag.StringVar(&leaderElectionNamespace, "leader-election-namespace", "cce-system",
+	flag.StringVar(&leaderElectionNamespace, "leader-election-namespace", "kube-system",
 		"This determines the namespace in which the leader election configmap will be created, it will use in-cluster namespace if empty.")
 	flag.BoolVar(&enablePprof, "enable-pprof", true, "Enable pprof for controller manager.")
 	flag.StringVar(&pprofAddr, "pprof-addr", ":8090", "The address the pprof binds to.")
